@@ -1,0 +1,2 @@
+
+This files contains step to do for automation in ansible for roboshop project
