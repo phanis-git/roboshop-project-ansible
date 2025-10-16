@@ -21,12 +21,28 @@
     loop: "{{ instances }}"
     register: ec2_output
 
-  - name: "Printing the ec2 details"
-    ansible.builtin.debug:
-      msg: "{{ ec2_output }}"
+  # - name: "Printing the ec2 details"
+  #   ansible.builtin.debug:
+  #     msg: "{{ ec2_output }}"
       
+  # - name: "Printing private Ip"
+  #   ansible.builtin.debug:
+  #     msg: "{{ item.instances[0].private_ip_address }}"
+  #   loop: "{{ ec2_output.results }}"
 
-  - name: "Printing public and private Ip"
-    ansible.builtin.debug:
-      msg: "{{ item.instances[0].private_ip_address }}"
-    loop: "{{ ec2_output.results }}"
+  # - name: "Printing public Ip"
+  #   ansible.builtin.debug:
+  #     msg: "{{ item.instances[0].public_ip_address }}"
+  #   loop: "{{ ec2_output.results }}"
+
+- name: "Create Route53 with public and private Ip's"
+  amazon.aws.route53:
+    state: present
+    zone: "{{ domain_name }}"
+    record: "{{ item.item }}.{{ domain_name }}"    #mongodb.devops-phani.fun
+    type: A
+    ttl: 1
+    value: "{{ item.instances[0].private_ip_address }}"
+    overwrite: true
+  loop: "{{ ec2_output.results }}"
+  
