@@ -1,2 +1,13 @@
 
 This files contains step to do for automation in ansible for roboshop project
+
+1. Creating instances by using ansible aws modules 
+    module name : amazon.aws.ec2_instance module – Create & manage EC2 instances
+    ex: frontend,mongodb,redis,payment, etc.
+
+2. Creating or Updating route53 records
+    module name : amazon.aws.route53 module – add or delete entries in Amazons Route 53 DNS service
+    ex: mongodb.devops-phani.fun , redis.devops-phani.fun
+
+3. Updating public ip for frontend instance and private Ip for other instances
+  
