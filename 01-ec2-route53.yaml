@@ -23,4 +23,9 @@
 
   - name: "Printing the ec2 details"
     ansible.builtin.debug:
-      msg: "ec2_output :: {{ ec2_output }}"
+      msg: "{{ ec2_output }}"
+      
+
+  - name: "Printing public and private Ip"
+    ansible.builtin.debug: "{{ name.instances[0].private_ip_address }}"
+    loop: "{{ ec2_output.results }}"
