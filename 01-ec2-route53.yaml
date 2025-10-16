@@ -7,8 +7,11 @@
     sg_id: "sg-01f9169658e1539df"
     hosted_zone_id: "Z06921933AGUP8YGI3FIB"
     domain_name: "devops-phani.fun"
-    instances:
-    - mongodb
+    # While creating instances we need to change the below list as for our requirement , so this approach is static
+    # Dynamically we can pass through command line like below , we can give multiple server in the below array
+    # ansible-playbook -i inventory.ini <file-name> -e "instances=['<servername>','<servername>']"
+    # instances:
+    # - mongodb
   tasks:
   - name: "amazon.aws.ec2_instance module – Create & manage EC2 instances"
     amazon.aws.ec2_instance:
