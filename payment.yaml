@@ -1,0 +1,73 @@
+---
+- name: "Payment setup"
+  hosts: payment
+  because: yes
+  tasks:
+    - name: "Installing python3 gcc python3-devel"
+      # ansible.builtin.package: if we give package ansible check our server for os based on os flavour 
+      # then that will install , if rhel - dnf like that
+      # Here i know i am using directly dnf because i know i am using dnf module
+      ansible.builtin.dnf:
+        name: "{{ item }}"
+        start: present
+      loop:
+      - python3 
+      - gcc
+      - python3-devel
+
+    - name: "Adding application user"
+      ansible.builtin.user:
+        name: roboshop
+        comment: "roboshop system user"
+        system: true
+        shell: /sbin/nologin
+        home: /app
+
+    # Removing app directory for existing code
+    - name: "Removing app directory due to removing existing code"
+      ansible.builtin.file:
+        path: /app
+        state: absent 
+
+    - name: create app directory
+      ansible.builtin.file:
+        state: directory
+        path: /app
+
+    - name: "Removing /tmp/payment.zip code file"
+      ansible.builtin.file:
+        path: /tmp/payment.zip
+        state: absent
+
+    - name: "Downloading the latest code"
+      ansible.builtin.get_url:
+        url: https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip
+        dest: /tmp/payment.zip
+
+    - name: "Unzip the file"
+      ansible.builtin.unarchive:
+      src: /tmp/payment.zip
+      dest: /app
+      remote_src: yes
+
+    - name: "Installing dependencies"
+      ansible.builtin.pip:
+        requirements: requirements.txt
+        executable: pip3.9  #installing pip3.9 version as it is python based 
+      args:         # this args is for sometimes we need to run the command in specific folder so here chdir is change directory to app folder and execute the installation
+      chdir: /app
+
+
+    - name: "Create or Copy paste the service file"
+      ansible.builtin.copy:
+        src: payment.service
+        dest: /etc/systemd/system/payment.service
+
+    - name: daemon reload enable and start
+      ansible.builtin.systemd_service:
+        name: payment
+        enabled: true
+        state: started
+        daemon_reload: true
+
+

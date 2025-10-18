@@ -38,7 +38,7 @@
   #     msg: "{{ item.instances[0].public_ip_address }}"
   #   loop: "{{ ec2_output.results }}"
 
-  - name: "Create Route53 with public and private Ip's"
+  - name: "Create Route53 private Ip's"
     amazon.aws.route53:
       state: present
       zone: "{{ domain_name }}"
@@ -47,5 +47,18 @@
       ttl: 1
       value: "{{ item.instances[0].private_ip_address }}"
       overwrite: true
+    loop: "{{ ec2_output.results }}"
+
+# Creating one record for only frontend with public IP
+  - name: "Create Route53 public Ip's if frontend"
+    amazon.aws.route53:
+      state: present
+      zone: "{{ domain_name }}"
+      record: "{{ domain_name }}"    #devops-phani.fun
+      type: A
+      ttl: 1
+      value: "{{ item.instances[0].public_ip_address }}"
+      overwrite: true
+    when: item.item == "frontend"
     loop: "{{ ec2_output.results }}"
   
