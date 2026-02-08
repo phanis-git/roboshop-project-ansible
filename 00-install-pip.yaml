@@ -9,3 +9,9 @@
       name: netaddr
       state: present
       executable: pip3.9
+  - name: "Install Boto3 botocore"
+    ansible.builtin.pip:
+        name:
+          - boto3
+          - botocore
+        state: present
