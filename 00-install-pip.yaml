@@ -1,0 +1,11 @@
+---
+- name: "Installing Pip3.9"
+  hosts: local
+  connection: local 
+  become: yes
+  tasks:
+  - name: "Install Pip3.9"
+    ansible.builtin.pip:
+      name: netaddr
+      state: present
+      executable: pip3.9
