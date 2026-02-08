@@ -12,7 +12,7 @@
     - name: "Install nodejs"
       ansible.builtin.package:
         name: nodejs 
-        start: present
+        state: present
 
     - name: "Adding App user or Application user"
       ansible.builtin.user:

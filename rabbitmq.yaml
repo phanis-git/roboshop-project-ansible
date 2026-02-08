@@ -11,12 +11,12 @@
     - name: "Install Rabbitmq"
       ansible.builtin.package:
         name: rabbitmq-server
-        start: present
+        state: present
 
     - name: "Start and enable service"
       ansible.builtin.service:
         name: rabbitmq-server
-        start: started
+        state: started
         enabled: yes
 
     - name: "Rabbitmq user add"

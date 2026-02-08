@@ -9,7 +9,7 @@
       # Here i know i am using directly dnf because i know i am using dnf module
       ansible.builtin.dnf:
         name: "{{ item }}"
-        start: present
+        state: present
       loop:
       - python3 
       - gcc

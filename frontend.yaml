@@ -12,7 +12,7 @@
     - name: "Installing nginx"  
       ansible.builtin.package:
         name: nginx
-        start: present
+        state: present
 
     - name: "Remove the default content of html directory"
       ansible.builtin.file:
